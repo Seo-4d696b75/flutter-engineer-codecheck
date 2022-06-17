@@ -1,6 +1,14 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_engineer_codecheck/model/api/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final githubApiProvider = Provider(
+  (ref) => GithubAPI(
+    ref.watch(dioProvider),
+  ),
+);
 
 class GithubAPI {
   GithubAPI(this._dio);

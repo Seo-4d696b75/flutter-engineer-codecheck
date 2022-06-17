@@ -2,6 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter_engineer_codecheck/model/api/github_api.dart';
 import 'package:flutter_engineer_codecheck/model/entities/repository_search_response.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final searchRepositoryProvider = Provider(
+  (ref) => SearchRepository(
+    ref.watch(githubApiProvider),
+  ),
+);
 
 class SearchRepository {
   SearchRepository(this._api);
