@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 class GithubAPI {
-  final Dio _dio = Dio(BaseOptions(baseUrl: "https://api.github.com/"));
+  GithubAPI(this._dio);
+
+  final Dio _dio;
 
   Future<String> fetchRepository({
     required String query,
@@ -16,7 +18,7 @@ class GithubAPI {
       "per_page": perPage,
     };
     final response = await _dio.get<String>(
-      "/search/repository",
+      "/search/repositories",
       queryParameters: queryMap,
     );
     final body = response.data;
