@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_engineer_codecheck/model/repository/search_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -13,10 +14,12 @@ final searchViewModelProvider =
 
 class SearchViewModel extends StateNotifier<String> {
   SearchViewModel(this._repository) : super("linux") {
-    controller.addPageRequestListener((page) => _fetchPage(page));
+    pagingController.addPageRequestListener((page) => _fetchPage(page));
   }
 
-  final controller = PagingController<int, GithubRepository>(firstPageKey: 1);
+  final textController = TextEditingController(text: "linux");
+  final pagingController =
+      PagingController<int, GithubRepository>(firstPageKey: 1);
 
   final pageSize = 10;
   final SearchRepository _repository;
@@ -33,14 +36,14 @@ class SearchViewModel extends StateNotifier<String> {
   Future<void> _refreshQuery(String value) async {
     await Future.delayed(const Duration(milliseconds: 500));
     if (state == value) {
-      controller.refresh();
+      pagingController.refresh();
     }
   }
 
   Future<void> _fetchPage(int page) async {
     final query = state;
     if (query.isEmpty) {
-      controller.appendLastPage([]);
+      pagingController.appendLastPage([]);
       return;
     }
     try {
@@ -50,18 +53,20 @@ class SearchViewModel extends StateNotifier<String> {
         perPage: pageSize,
       );
       if (page * pageSize < response.totalCount) {
-        controller.appendPage(response.items, page + 1);
+        pagingController.appendPage(response.items, page + 1);
       } else {
-        controller.appendLastPage(response.items);
+        pagingController.appendLastPage(response.items);
       }
     } on Exception catch (e) {
-      controller.error = e;
+      pagingController.error = e;
     }
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    pagingController.dispose();
+    textController.dispose();
     super.dispose();
+    debugPrint("dispose controller");
   }
 }

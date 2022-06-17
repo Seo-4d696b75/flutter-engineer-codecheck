@@ -14,8 +14,42 @@ class SearchPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Search Repository"),
       ),
-      body: const _List(),
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: const [
+          _SearchBox(),
+          Expanded(child: _List()),
+        ],
+      ),
       backgroundColor: const Color.fromARGB(230, 255, 255, 255),
+    );
+  }
+}
+
+class _SearchBox extends ConsumerWidget {
+  const _SearchBox({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(searchViewModelProvider.notifier);
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.all(10),
+      color: Colors.white,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const Text("Input Query"),
+          Container(width: 10),
+          Expanded(
+            child: TextFormField(
+              controller: viewModel.textController,
+              textInputAction: TextInputAction.go,
+              onFieldSubmitted: (value) => viewModel.query = value,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -28,7 +62,7 @@ class _List extends ConsumerWidget {
     final viewModel = ref.watch(searchViewModelProvider.notifier);
     return RefreshIndicator(
       child: PagedListView(
-        pagingController: viewModel.controller,
+        pagingController: viewModel.pagingController,
         builderDelegate: PagedChildBuilderDelegate<GithubRepository>(
           itemBuilder: (context, item, index) => Card(
             child: ListTile(
@@ -38,7 +72,7 @@ class _List extends ConsumerWidget {
           ),
         ),
       ),
-      onRefresh: () async => viewModel.controller.refresh(),
+      onRefresh: () async => viewModel.pagingController.refresh(),
     );
   }
 }
