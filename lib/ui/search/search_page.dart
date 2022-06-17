@@ -10,8 +10,12 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: _List(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Search Repository"),
+      ),
+      body: const _List(),
+      backgroundColor: const Color.fromARGB(220, 255, 255, 255),
     );
   }
 }
@@ -25,9 +29,11 @@ class _List extends ConsumerWidget {
     return PagedListView(
       pagingController: viewModel.controller,
       builderDelegate: PagedChildBuilderDelegate<GithubRepository>(
-        itemBuilder: (context, item, index) => ListTile(
-          title: Text(item.fullName),
-          subtitle: Text(item.owner?.login ?? ""),
+        itemBuilder: (context, item, index) => Card(
+          child: ListTile(
+            title: Text(item.fullName),
+            subtitle: Text(item.owner?.login ?? ""),
+          ),
         ),
       ),
     );
