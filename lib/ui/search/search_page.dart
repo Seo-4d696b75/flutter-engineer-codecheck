@@ -64,15 +64,34 @@ class _List extends ConsumerWidget {
       child: PagedListView(
         pagingController: viewModel.pagingController,
         builderDelegate: PagedChildBuilderDelegate<GithubRepository>(
-          itemBuilder: (context, item, index) => Card(
-            child: ListTile(
-              title: Text(item.fullName),
-              subtitle: Text(item.owner?.login ?? ""),
-            ),
+          itemBuilder: (context, item, index) => _ListItem(
+            item: item,
+            onClick: () => viewModel.onListItemSelected(item),
           ),
         ),
       ),
       onRefresh: () async => viewModel.pagingController.refresh(),
+    );
+  }
+}
+
+class _ListItem extends StatelessWidget {
+  const _ListItem({required this.item, required this.onClick});
+
+  final GithubRepository item;
+  final void Function() onClick;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onClick,
+      child: Card(
+        child: ListTile(
+          title: Text(item.fullName),
+          subtitle: Text(item.owner?.login ?? ""),
+        ),
+      ),
     );
   }
 }
