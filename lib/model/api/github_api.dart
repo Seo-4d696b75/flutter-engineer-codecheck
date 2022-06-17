@@ -7,10 +7,12 @@ class GithubAPI {
 
   Future<String> fetchRepository({
     required String query,
+    required int page,
     int perPage = 30,
   }) async {
     final queryMap = {
       "q": query,
+      "page": page,
       "per_page": perPage,
     };
     final response = await _dio.get<String>(
