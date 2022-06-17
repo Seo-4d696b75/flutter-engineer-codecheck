@@ -26,18 +26,11 @@ class SearchViewModel extends StateNotifier<String> {
 
   set query(String value) {
     state = value;
-    _refreshQuery(value);
+    pagingController.refresh();
   }
 
   void onListItemSelected(GithubRepository item) {
     // TODO 詳細画面への遷移
-  }
-
-  Future<void> _refreshQuery(String value) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (state == value) {
-      pagingController.refresh();
-    }
   }
 
   Future<void> _fetchPage(int page) async {
