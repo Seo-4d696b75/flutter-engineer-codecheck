@@ -11,7 +11,7 @@ class GithubRepository with _$GithubRepository {
     required int id,
     required String name,
     required String fullName,
-    required String description,
+    required String? description,
     required String? language,
     required int stargazersCount,
     required int watchersCount,
