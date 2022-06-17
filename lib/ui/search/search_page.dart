@@ -15,7 +15,7 @@ class SearchPage extends StatelessWidget {
         title: const Text("Search Repository"),
       ),
       body: const _List(),
-      backgroundColor: const Color.fromARGB(220, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(230, 255, 255, 255),
     );
   }
 }
@@ -26,16 +26,19 @@ class _List extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(searchViewModelProvider.notifier);
-    return PagedListView(
-      pagingController: viewModel.controller,
-      builderDelegate: PagedChildBuilderDelegate<GithubRepository>(
-        itemBuilder: (context, item, index) => Card(
-          child: ListTile(
-            title: Text(item.fullName),
-            subtitle: Text(item.owner?.login ?? ""),
+    return RefreshIndicator(
+      child: PagedListView(
+        pagingController: viewModel.controller,
+        builderDelegate: PagedChildBuilderDelegate<GithubRepository>(
+          itemBuilder: (context, item, index) => Card(
+            child: ListTile(
+              title: Text(item.fullName),
+              subtitle: Text(item.owner?.login ?? ""),
+            ),
           ),
         ),
       ),
+      onRefresh: () async => viewModel.controller.refresh(),
     );
   }
 }
