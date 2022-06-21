@@ -21,9 +21,28 @@ void main() {
         File("test/json/search_repository_linux_10.json").readAsStringSync();
     final mockResponse = RepositorySearchResponse.fromJson(jsonDecode(str));
 
+    Future<void> waitUntil(
+      SearchViewModel viewModel,
+      PagingStatus status,
+    ) {
+      final wait = Completer<void>();
+      viewModel.pagingController.addStatusListener((s) {
+        if (s == status) {
+          wait.complete();
+        }
+      });
+      return wait.future;
+    }
+
+    SearchViewModel getViewModel() {
+      final v = SearchViewModel(mockRepository);
+      addTearDown(() => v.dispose());
+      return v;
+    }
+
     test("初期状態", () {
       // prepare
-      final viewModel = SearchViewModel(mockRepository);
+      final viewModel = getViewModel();
 
       // verify
       expect(viewModel.pagingController.itemList, isNull);
@@ -37,7 +56,7 @@ void main() {
     });
     test("初回読み込み", () async {
       // prepare
-      final viewModel = SearchViewModel(mockRepository);
+      final viewModel = getViewModel();
       final completer = Completer<void>();
       when(mockRepository.search(
         query: query,
@@ -59,15 +78,10 @@ void main() {
 
       // complete loading
       completer.complete();
-      // TODO avoid delay!!
-      await Future.delayed(const Duration(milliseconds: 100));
+      await waitUntil(viewModel, PagingStatus.ongoing);
       expect(
         viewModel.pagingController.itemList?.length,
         mockResponse.items.length,
-      );
-      expect(
-        viewModel.pagingController.value.status,
-        PagingStatus.ongoing,
       );
       expect(
         viewModel.pagingController.value.nextPageKey,
@@ -83,7 +97,7 @@ void main() {
     });
     test("追加読み込み", () async {
       // prepare
-      final viewModel = SearchViewModel(mockRepository);
+      final viewModel = getViewModel();
       when(mockRepository.search(
         query: query,
         page: 1,
@@ -95,8 +109,7 @@ void main() {
       // first loading
       viewModel.query = query;
       viewModel.pagingController.notifyPageRequestListeners(1);
-      // TODO avoid delay!!
-      await Future.delayed(const Duration(milliseconds: 100));
+      await waitUntil(viewModel, PagingStatus.ongoing);
 
       // prepare
       final completer = Completer<void>();
@@ -121,15 +134,10 @@ void main() {
 
       // complete loading
       completer.complete();
-      // TODO avoid delay!!
-      await Future.delayed(const Duration(milliseconds: 100));
+      await waitUntil(viewModel, PagingStatus.completed);
       expect(
         viewModel.pagingController.itemList?.length,
         mockResponse.items.length * 2,
-      );
-      expect(
-        viewModel.pagingController.value.status,
-        PagingStatus.completed,
       );
       expect(
         viewModel.pagingController.value.nextPageKey,
@@ -139,7 +147,7 @@ void main() {
 
     test("初回読み込み失敗", () async {
       // prepare
-      final viewModel = SearchViewModel(mockRepository);
+      final viewModel = getViewModel();
       when(mockRepository.search(
         query: query,
         page: 1,
@@ -152,13 +160,8 @@ void main() {
       viewModel.query = query;
       viewModel.pagingController.notifyPageRequestListeners(1);
 
-      // TODO avoid delay!!
-      await Future.delayed(const Duration(milliseconds: 100));
+      await waitUntil(viewModel, PagingStatus.firstPageError);
 
-      expect(
-        viewModel.pagingController.value.status,
-        PagingStatus.firstPageError,
-      );
       expect(
         viewModel.pagingController.itemList,
         isNull,
@@ -166,7 +169,7 @@ void main() {
     });
     test("追加読み込み失敗", () async {
       // prepare (first-loading)
-      final viewModel = SearchViewModel(mockRepository);
+      final viewModel = getViewModel();
       when(mockRepository.search(
         query: query,
         page: 1,
@@ -176,8 +179,7 @@ void main() {
       });
       viewModel.query = query;
       viewModel.pagingController.notifyPageRequestListeners(1);
-      // TODO avoid delay!!
-      await Future.delayed(const Duration(milliseconds: 100));
+      await waitUntil(viewModel, PagingStatus.ongoing);
 
       // prepare (additional-loading)
       when(mockRepository.search(
@@ -191,8 +193,7 @@ void main() {
       // test & verify
       viewModel.pagingController.notifyPageRequestListeners(2);
 
-      // TODO avoid delay!!
-      await Future.delayed(const Duration(milliseconds: 100));
+      await waitUntil(viewModel, PagingStatus.subsequentPageError);
 
       expect(
         viewModel.pagingController.value.status,
