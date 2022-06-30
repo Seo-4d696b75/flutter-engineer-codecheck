@@ -48,3 +48,6 @@ app.*.map.json
 # auto generated files by freezed
 /lib/**/*.freezed.dart
 /lib/**/*.g.dart
+
+# auto generated files by flutter_gen
+/lib/gen/
