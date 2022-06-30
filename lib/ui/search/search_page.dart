@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_engineer_codecheck/ui/search/search_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../model/entities/repository.dart';
+import '../detail/detail_view_model.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -66,7 +68,12 @@ class _List extends ConsumerWidget {
         builderDelegate: PagedChildBuilderDelegate<GithubRepository>(
           itemBuilder: (context, item, index) => _ListItem(
             item: item,
-            onClick: () => viewModel.onListItemSelected(item),
+            onClick: () {
+              ref
+                  .read(repositoryDetailViewModelProvider.notifier)
+                  .selectRepository(item);
+              GoRouter.of(context).go("/repository");
+            },
           ),
         ),
       ),
