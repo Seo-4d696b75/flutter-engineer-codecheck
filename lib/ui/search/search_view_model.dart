@@ -29,11 +29,6 @@ class SearchViewModel extends StateNotifier<String> {
     pagingController.refresh();
   }
 
-  void onListItemSelected(GithubRepository item) {
-    // TODO 詳細画面への遷移
-    debugPrint("item selected: ${item.name}");
-  }
-
   Future<void> _fetchPage(int page) async {
     final query = state;
     if (query.isEmpty) {

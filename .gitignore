@@ -51,3 +51,6 @@ app.*.map.json
 
 # auto generated files by mockito
 /test/**/*.mocks.dart
+
+# auto generated files by flutter_gen
+/lib/gen/
