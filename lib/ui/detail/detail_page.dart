@@ -36,6 +36,7 @@ class _RepositoryDetail extends ConsumerWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 _OwnerIcon(repository.owner),
+                Container(width: 10),
                 Expanded(
                   child: Text(
                     repository.fullName,
@@ -46,35 +47,37 @@ class _RepositoryDetail extends ConsumerWidget {
                 ),
               ],
             ),
+            Container(height: 20),
+            const _FeatureTitle("About"),
             _RepositoryFeature(
               Assets.img.star.svg(),
-              "${repository.stargazersCount} star",
+              repository.stargazersCount.toString(),
+              " star",
             ),
             _RepositoryFeature(
               Assets.img.watch.svg(),
-              "${repository.watchersCount} watching",
+              repository.watchersCount.toString(),
+              " watching",
             ),
             _RepositoryFeature(
               Assets.img.fork.svg(),
-              "${repository.forksCount} forks",
+              repository.forksCount.toString(),
+              " forks",
             ),
             _RepositoryFeature(
               Assets.img.issue.svg(),
-              "${repository.openIssuesCount} open issues",
+              repository.openIssuesCount.toString(),
+              " open issues",
             ),
+            const _FeatureTitle("language"),
             Container(
-              margin: const EdgeInsets.only(top: 10),
-              padding: const EdgeInsets.all(5),
-              child: const Text(
-                "language",
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(repository.language ?? "no information"),
             ),
+            const _FeatureTitle("description"),
             Container(
-              padding: const EdgeInsets.all(5),
-              child: Text(repository.language ?? ""),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(repository.description ?? "no description"),
             ),
           ],
         ));
@@ -89,41 +92,78 @@ class _OwnerIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final url = owner?.avatarUrl;
-    return SizedBox.square(
-      dimension: 100,
-      child: url == null
-          ? const Icon(
-              Icons.perm_identity,
-            )
-          : Image.network(
-              url,
-            ),
+    if (url == null) {
+      return const SizedBox.square(
+        dimension: 100,
+        child: Icon(Icons.perm_identity),
+      );
+    }
+    return Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+        image: DecorationImage(
+          fit: BoxFit.contain,
+          image: NetworkImage(url),
+        ),
+      ),
+    );
+  }
+}
+
+class _FeatureTitle extends StatelessWidget {
+  const _FeatureTitle(this.title);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 15, bottom: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
     );
   }
 }
 
 class _RepositoryFeature extends StatelessWidget {
-  const _RepositoryFeature(this._icon, this._text);
+  const _RepositoryFeature(this._icon, this._value, this._suffix);
 
   final Widget _icon;
-  final String _text;
+  final String _value;
+  final String _suffix;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           SizedBox.square(
-            dimension: 20,
+            dimension: 24,
             child: _icon,
           ),
           Container(
             margin: const EdgeInsets.only(left: 12),
-            child: Text(
-              _text,
-              style: const TextStyle(
-                fontSize: 18,
+            child: Text.rich(
+              TextSpan(
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
+                children: [
+                  TextSpan(
+                    text: _value,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(text: _suffix),
+                ],
               ),
             ),
           )
