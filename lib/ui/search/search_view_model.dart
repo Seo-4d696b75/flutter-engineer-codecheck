@@ -24,8 +24,8 @@ class SearchViewModel extends StateNotifier<String> {
   final pageSize = 10;
   final SearchRepository _repository;
 
-  set query(String value) {
-    state = value;
+  void search() {
+    state = textController.value.text;
     pagingController.refresh();
   }
 

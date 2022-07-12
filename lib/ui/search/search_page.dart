@@ -48,6 +48,17 @@ class _SearchBox extends ConsumerWidget {
               onFieldSubmitted: (value) => viewModel.query = value,
             ),
           ),
+          Container(width: 20),
+          ElevatedButton(
+            onPressed: () {
+              final currentScope = FocusScope.of(context);
+              if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              }
+              viewModel.search();
+            },
+            child: const Text("Search"),
+          ),
         ],
       ),
     );
