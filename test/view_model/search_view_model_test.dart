@@ -68,7 +68,8 @@ void main() {
       });
 
       // test & verify
-      viewModel.query = query;
+      viewModel.textController.text = query;
+      viewModel.search();
       // widgetからの呼び出しがないため明示的にコール
       viewModel.pagingController.notifyPageRequestListeners(1);
       expect(
@@ -107,7 +108,8 @@ void main() {
       });
 
       // first loading
-      viewModel.query = query;
+      viewModel.textController.text = query;
+      viewModel.search();
       viewModel.pagingController.notifyPageRequestListeners(1);
       await waitUntil(viewModel, PagingStatus.ongoing);
 
@@ -157,7 +159,8 @@ void main() {
       });
 
       // test & verify
-      viewModel.query = query;
+      viewModel.textController.text = query;
+      viewModel.search();
       viewModel.pagingController.notifyPageRequestListeners(1);
 
       await waitUntil(viewModel, PagingStatus.firstPageError);
@@ -177,7 +180,8 @@ void main() {
       )).thenAnswer((_) async {
         return mockResponse;
       });
-      viewModel.query = query;
+      viewModel.textController.text = query;
+      viewModel.search();
       viewModel.pagingController.notifyPageRequestListeners(1);
       await waitUntil(viewModel, PagingStatus.ongoing);
 
