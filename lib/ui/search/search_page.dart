@@ -33,19 +33,22 @@ class _SearchBox extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(searchViewModelProvider.notifier);
     return Container(
-      height: 50,
-      padding: const EdgeInsets.all(10),
+      height: 80,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       color: Colors.white,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          const Text("Input Query"),
-          Container(width: 10),
           Expanded(
             child: TextFormField(
               controller: viewModel.textController,
               textInputAction: TextInputAction.go,
-              onFieldSubmitted: (value) => viewModel.query = value,
+              onFieldSubmitted: (value) => viewModel.search(),
+              decoration: const InputDecoration(
+                labelText: "search query",
+                hintText: "linux",
+                hintStyle: TextStyle(color: Colors.grey),
+              ),
             ),
           ),
           Container(width: 20),
