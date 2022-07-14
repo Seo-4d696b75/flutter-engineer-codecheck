@@ -13,11 +13,11 @@ final searchViewModelProvider =
 );
 
 class SearchViewModel extends StateNotifier<String> {
-  SearchViewModel(this._repository) : super("linux") {
+  SearchViewModel(this._repository) : super("") {
     pagingController.addPageRequestListener((page) => _fetchPage(page));
   }
 
-  final textController = TextEditingController(text: "linux");
+  final textController = TextEditingController(text: "");
   final pagingController =
       PagingController<int, GithubRepository>(firstPageKey: 1);
 
@@ -25,8 +25,12 @@ class SearchViewModel extends StateNotifier<String> {
   final SearchRepository _repository;
 
   void search() {
-    state = textController.value.text;
-    pagingController.refresh();
+    final query = textController.value.text;
+    if (query.isEmpty) {
+    } else {
+      state = query;
+      pagingController.refresh();
+    }
   }
 
   Future<void> _fetchPage(int page) async {
