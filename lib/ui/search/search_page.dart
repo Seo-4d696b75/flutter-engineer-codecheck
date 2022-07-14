@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_engineer_codecheck/ui/search/search_view_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_engineer_codecheck/ui/search/search_view_state.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../model/entities/repository.dart';
@@ -28,7 +30,7 @@ class SearchPage extends StatelessWidget {
   }
 }
 
-class _SearchBox extends ConsumerWidget {
+class _SearchBox extends HookConsumerWidget {
   const _SearchBox({Key? key}) : super(key: key);
 
   @override
@@ -36,20 +38,16 @@ class _SearchBox extends ConsumerWidget {
     final viewModel = ref.watch(searchViewModelProvider.notifier);
     final events =
         ref.watch(searchViewModelProvider.select((state) => state.events));
-    if (events.isNotEmpty) {
-      for (final event in events) {
-        event.maybeWhen(
-          emptyQuery: () {
-            const snackBar = SnackBar(
-              content: Text("Empty Query String!"),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          },
-          orElse: () {},
-        );
+    useEffect(() {
+      if (events.isNotEmpty) {
+        Future.microtask(() {
+          // buildより後に実行する必要がある
+          _handleEvents(context, events);
+          viewModel.consumeEvents();
+        });
       }
-      viewModel.consumeEvents();
-    }
+      return null;
+    }, [events]);
     return Container(
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -83,6 +81,20 @@ class _SearchBox extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  void _handleEvents(BuildContext context, List<SearchViewEvent> events) {
+    for (final event in events) {
+      event.maybeWhen(
+        emptyQuery: () {
+          const snackBar = SnackBar(
+            content: Text("Empty Query String!"),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        },
+        orElse: () {},
+      );
+    }
   }
 }
 
