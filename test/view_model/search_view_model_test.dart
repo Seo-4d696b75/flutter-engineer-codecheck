@@ -28,15 +28,21 @@ void main() {
       final wait = Completer<void>();
       viewModel.pagingController.addStatusListener((s) {
         if (s == status) {
+          viewModel.pagingController.value.status;
           wait.complete();
         }
       });
       return wait.future;
     }
 
+    final mockListener = MockListener<PagingStatus>();
+
     SearchViewModel getViewModel() {
       final v = SearchViewModel(mockRepository);
-      addTearDown(() => v.dispose());
+      // 最初の状態もcallする
+      mockListener.call(v.pagingController.value.status);
+      v.pagingController.addStatusListener(mockListener);
+      addTearDown(v.dispose);
       return v;
     }
 
@@ -57,29 +63,20 @@ void main() {
     test("初回読み込み", () async {
       // prepare
       final viewModel = getViewModel();
-      final completer = Completer<void>();
       when(mockRepository.search(
         query: query,
         page: 1,
         perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
-        await completer.future;
-        return mockResponse;
-      });
+      )).thenAnswer((_) async => mockResponse);
 
-      // test & verify
+      // test
       viewModel.textController.text = query;
       viewModel.search();
       // widgetからの呼び出しがないため明示的にコール
       viewModel.pagingController.notifyPageRequestListeners(1);
-      expect(
-        viewModel.pagingController.value.status,
-        PagingStatus.loadingFirstPage,
-      );
-
-      // complete loading
-      completer.complete();
       await waitUntil(viewModel, PagingStatus.ongoing);
+
+      // verify
       expect(
         viewModel.pagingController.itemList?.length,
         mockResponse.items.length,
@@ -88,6 +85,10 @@ void main() {
         viewModel.pagingController.value.nextPageKey,
         2,
       );
+      verifyInOrder([
+        mockListener.call(PagingStatus.loadingFirstPage),
+        mockListener.call(PagingStatus.ongoing),
+      ]);
       verify(
         mockRepository.search(
           query: query,
@@ -103,9 +104,7 @@ void main() {
         query: query,
         page: 1,
         perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
-        return mockResponse;
-      });
+      )).thenAnswer((_) async => mockResponse);
 
       // first loading
       viewModel.textController.text = query;
@@ -114,29 +113,22 @@ void main() {
       await waitUntil(viewModel, PagingStatus.ongoing);
 
       // prepare
-      final completer = Completer<void>();
       when(mockRepository.search(
         query: query,
         page: 2,
         perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
-        await completer.future;
-        return mockResponse.copyWith(
+      )).thenAnswer(
+        (_) async => mockResponse.copyWith(
           // nextPageなし
           totalCount: mockResponse.items.length * 2,
-        );
-      });
-
-      // test & verify
-      viewModel.pagingController.notifyPageRequestListeners(2);
-      expect(
-        viewModel.pagingController.value.status,
-        PagingStatus.ongoing,
+        ),
       );
 
-      // complete loading
-      completer.complete();
+      // test
+      viewModel.pagingController.notifyPageRequestListeners(2);
       await waitUntil(viewModel, PagingStatus.completed);
+
+      // verify
       expect(
         viewModel.pagingController.itemList?.length,
         mockResponse.items.length * 2,
@@ -145,6 +137,11 @@ void main() {
         viewModel.pagingController.value.nextPageKey,
         isNull,
       );
+      verifyInOrder([
+        mockListener.call(PagingStatus.loadingFirstPage),
+        mockListener.call(PagingStatus.ongoing),
+        mockListener.call(PagingStatus.completed),
+      ]);
     });
 
     test("初回読み込み失敗", () async {
@@ -158,17 +155,22 @@ void main() {
         throw const HttpException("test");
       });
 
-      // test & verify
+      // test
       viewModel.textController.text = query;
       viewModel.search();
       viewModel.pagingController.notifyPageRequestListeners(1);
 
       await waitUntil(viewModel, PagingStatus.firstPageError);
 
+      // verify
       expect(
         viewModel.pagingController.itemList,
         isNull,
       );
+      verifyInOrder([
+        mockListener.call(PagingStatus.loadingFirstPage),
+        mockListener.call(PagingStatus.firstPageError),
+      ]);
     });
     test("追加読み込み失敗", () async {
       // prepare (first-loading)
@@ -177,9 +179,7 @@ void main() {
         query: query,
         page: 1,
         perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
-        return mockResponse;
-      });
+      )).thenAnswer((_) async => mockResponse);
       viewModel.textController.text = query;
       viewModel.search();
       viewModel.pagingController.notifyPageRequestListeners(1);
@@ -194,11 +194,11 @@ void main() {
         throw const HttpException("test");
       });
 
-      // test & verify
+      // test
       viewModel.pagingController.notifyPageRequestListeners(2);
-
       await waitUntil(viewModel, PagingStatus.subsequentPageError);
 
+      // verify
       expect(
         viewModel.pagingController.value.status,
         PagingStatus.subsequentPageError,
@@ -207,6 +207,15 @@ void main() {
         viewModel.pagingController.itemList?.length,
         mockResponse.items.length,
       );
+      verifyInOrder([
+        mockListener.call(PagingStatus.loadingFirstPage),
+        mockListener.call(PagingStatus.ongoing),
+        mockListener.call(PagingStatus.subsequentPageError),
+      ]);
     });
   });
+}
+
+class MockListener<T> extends Mock {
+  void call(T? value);
 }
