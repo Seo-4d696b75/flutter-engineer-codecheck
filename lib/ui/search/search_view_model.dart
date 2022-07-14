@@ -34,6 +34,8 @@ class SearchViewModel extends StateNotifier<SearchViewState> {
     state = state.copyWith(query: query);
     if (query.isEmpty) {
       state = state.enqueueEvent(SearchViewEvent.emptyQuery());
+    } else if (pagingController.value.status == PagingStatus.loadingFirstPage) {
+      state = state.enqueueEvent(SearchViewEvent.waitSearch());
     } else {
       pagingController.refresh();
     }
@@ -45,6 +47,7 @@ class SearchViewModel extends StateNotifier<SearchViewState> {
 
   Future<void> _fetchPage(int page) async {
     final query = state.query;
+    await Future<void>.delayed(const Duration(milliseconds: 5000));
     if (query.isEmpty) {
       pagingController.appendLastPage([]);
       return;

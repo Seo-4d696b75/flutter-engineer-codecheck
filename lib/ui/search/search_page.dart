@@ -92,6 +92,12 @@ class _SearchBox extends HookConsumerWidget {
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
+        waitSearch: () {
+          const snackBar = SnackBar(
+            content: Text("Wait While Searching!"),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        },
         orElse: () {},
       );
     }
