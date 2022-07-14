@@ -34,6 +34,22 @@ class _SearchBox extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(searchViewModelProvider.notifier);
+    final events =
+        ref.watch(searchViewModelProvider.select((state) => state.events));
+    if (events.isNotEmpty) {
+      for (final event in events) {
+        event.maybeWhen(
+          emptyQuery: () {
+            const snackBar = SnackBar(
+              content: Text("Empty Query String!"),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+          orElse: () {},
+        );
+      }
+      viewModel.consumeEvents();
+    }
     return Container(
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
