@@ -1,19 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_engineer_codecheck/model/repository/search_repository.dart';
+import 'package:flutter_engineer_codecheck/ui/search/search_view_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../model/entities/repository.dart';
 
 final searchViewModelProvider =
-    StateNotifierProvider.autoDispose<SearchViewModel, String>(
+    StateNotifierProvider.autoDispose<SearchViewModel, SearchViewState>(
   (ref) => SearchViewModel(
     ref.watch(searchRepositoryProvider),
   ),
 );
 
-class SearchViewModel extends StateNotifier<String> {
-  SearchViewModel(this._repository) : super("") {
+class SearchViewModel extends StateNotifier<SearchViewState> {
+  SearchViewModel(this._repository)
+      : super(SearchViewState(
+          query: "",
+          events: [],
+        )) {
     pagingController.addPageRequestListener((page) => _fetchPage(page));
   }
 
@@ -26,15 +31,20 @@ class SearchViewModel extends StateNotifier<String> {
 
   void search() {
     final query = textController.value.text;
+    state = state.copyWith(query: query);
     if (query.isEmpty) {
+      state = state.enqueueEvent(SearchViewEvent.emptyQuery());
     } else {
-      state = query;
       pagingController.refresh();
     }
   }
 
+  void consumeEvents() {
+    state = state.copyWith(events: []);
+  }
+
   Future<void> _fetchPage(int page) async {
-    final query = state;
+    final query = state.query;
     if (query.isEmpty) {
       pagingController.appendLastPage([]);
       return;
