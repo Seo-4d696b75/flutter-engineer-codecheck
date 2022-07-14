@@ -1,3 +1,3 @@
 setup:
-	flutter pub get
-	flutter pub run build_runner build
+	fvm flutter pub get
+	fvm flutter pub run build_runner build

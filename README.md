@@ -1,5 +1,43 @@
 # 株式会社ゆめみ Flutter エンジニアコードチェック課題
 
+## Setup
+
+### Install [FVM] (https://fvm.app/)
+
+flutterのバージョン管理を行うツールです
+
+https://fvm.app/docs/getting_started/installation
+
+```shell
+brew tap leoafarias/fvm
+brew install fvm
+```
+
+### Install Flutter
+
+3.0.0以上のバージョンを用意します
+
+```shell
+fvm use 3.0.0
+```
+
+**AndroidStudioの設定**
+
+[Flutter SKDの場所を`${projectDir}/.fvm/flutter_sdk`に指定します]
+(https://fvm.app/docs/getting_started/configuration#android-studio)
+
+### Pub get & build_runner
+
+初回時＆パッケージの追加のタイミングで実行します
+
+```shell
+make setup
+```
+
+以下元の指示
+
+----------------
+
 本プロジェクトは株式会社ゆめみ（以下弊社）が、弊社に Flutter エンジニアを希望する方に出す課題用のプロジェクトです。 本課題が与えられた方は、以下を詳しく読んだ上で課題に取り組んでください。
 
 ## 概要
@@ -30,8 +68,9 @@
 
 - 何かしらのキーワードを入力できる
 - 入力したキーワードで GitHub のリポジトリを検索できる
-- GitHub のリポジトリを検索する際、GitHub API（[`search/repositories`](https://docs.github.com/ja/rest/reference/search#search-repositories)）を利用する
-  - [github | Dart Package](https://pub.dev/packages/github) のようなパッケージは利用せず、API を呼ぶ処理を自分で実装すること
+- GitHub のリポジトリを検索する際、GitHub
+  API（[`search/repositories`](https://docs.github.com/ja/rest/reference/search#search-repositories)）を利用する
+    - [github | Dart Package](https://pub.dev/packages/github) のようなパッケージは利用せず、API を呼ぶ処理を自分で実装すること
 - 検索結果は一覧で概要（リポジトリ名）を表示する
 - 検索結果のアイテムをタップしたら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star 数、Watcher 数、Fork 数、Issue 数）を表示する
 
@@ -48,30 +87,30 @@
 ## 評価ポイント
 
 - レビューのしやすさ
-  - README の充実
-  - 適切なコメント
-  - GitHub のプルリクエスト機能などの利用
+    - README の充実
+    - 適切なコメント
+    - GitHub のプルリクエスト機能などの利用
 - Git
-  - 適切な gitignore の設定
-  - 適切なコミット粒度
-  - 適切なブランチ運用
+    - 適切な gitignore の設定
+    - 適切なコミット粒度
+    - 適切なブランチ運用
 - 簡潔性・可読性・安全性・保守性の高いコード
 - Dart の言語機能を適切に使いこなせているか
 - テスト
-  - テストが導入しやすい構成
-  - Unit・UI テストがある
+    - テストが導入しやすい構成
+    - Unit・UI テストがある
 - UI/UX
-  - エラー発生時の処理
-  - 画面回転・様々な画面サイズ対応
-  - Theme の適切な利用・ダークモードの対応
-  - 多言語対応
-  - アニメーションなど
+    - エラー発生時の処理
+    - 画面回転・様々な画面サイズ対応
+    - Theme の適切な利用・ダークモードの対応
+    - 多言語対応
+    - アニメーションなど
 - CI/CD
-  - ビルド
-  - テスト
-  - リント
-  - フォーマット
-  - 仮のデプロイ環境
+    - ビルド
+    - テスト
+    - リント
+    - フォーマット
+    - 仮のデプロイ環境
 
 上記以外でも高く評価できるポイントがあれば同等に考慮します。
 

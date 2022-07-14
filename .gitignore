@@ -54,3 +54,6 @@ app.*.map.json
 
 # auto generated files by flutter_gen
 /lib/gen/
+
+# fvm
+/.fvm/flutter_sdk
