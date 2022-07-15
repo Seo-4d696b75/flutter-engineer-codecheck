@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "searchPageTitle": "Search Repository",
+  "searchQueryLabel": "search query",
+  "searchQueryHint": "linux",
+  "searchButtonText": "Search",
+  "searchMessageEmptyQuery": "Empty Query String!",
+  "searchMessageWait": "Wait While Searching!",
+  "detailPageTitle": "Repository",
+  "detailSectionAbout": "About",
+  "detailSectionLanguage": "Language",
+  "detailSectionDescription": "Description",
+  "detailTextStar": " star",
+  "detailTextWatching": " watching",
+  "detailTextFork": " forks",
+  "detailTextIssue": " open issue",
+  "detailTextNoLanguage": "no information",
+  "detailTextNoDescription": "no description"
+}

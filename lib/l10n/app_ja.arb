@@ -1,0 +1,19 @@
+{
+  "@@locale": "ja",
+  "searchPageTitle": "リポジトリ検索",
+  "searchQueryLabel": "検索キーワード",
+  "searchQueryHint": "linux",
+  "searchButtonText": "検索",
+  "searchMessageEmptyQuery": "検索キーワードが空白です！",
+  "searchMessageWait": "現在検索中です…",
+  "detailPageTitle": "リポジトリ詳細",
+  "detailSectionAbout": "概要",
+  "detailSectionLanguage": "使用言語",
+  "detailSectionDescription": "説明",
+  "detailTextStar": "個のStar",
+  "detailTextWatching": "人がWatch",
+  "detailTextFork": "件のFork",
+  "detailTextIssue": "個のオープンなIssue",
+  "detailTextNoLanguage": "情報がありません",
+  "detailTextNoDescription": "説明はありません"
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_engineer_codecheck/ui/search/search_view_model.dart';
 import 'package:flutter_engineer_codecheck/ui/search/search_view_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -14,9 +15,10 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = L10n.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Search Repository"),
+        title: Text(l.searchPageTitle),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
@@ -48,6 +50,7 @@ class _SearchBox extends HookConsumerWidget {
       }
       return null;
     }, [events]);
+    final l = L10n.of(context);
     return Container(
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -60,10 +63,10 @@ class _SearchBox extends HookConsumerWidget {
               controller: viewModel.textController,
               textInputAction: TextInputAction.go,
               onFieldSubmitted: (value) => viewModel.search(),
-              decoration: const InputDecoration(
-                labelText: "search query",
-                hintText: "linux",
-                hintStyle: TextStyle(color: Colors.grey),
+              decoration: InputDecoration(
+                labelText: l.searchQueryLabel,
+                hintText: l.searchQueryHint,
+                hintStyle: const TextStyle(color: Colors.grey),
               ),
             ),
           ),
@@ -76,7 +79,7 @@ class _SearchBox extends HookConsumerWidget {
               }
               viewModel.search();
             },
-            child: const Text("Search"),
+            child: Text(l.searchButtonText),
           ),
         ],
       ),
@@ -84,17 +87,18 @@ class _SearchBox extends HookConsumerWidget {
   }
 
   void _handleEvents(BuildContext context, List<SearchViewEvent> events) {
+    final l = L10n.of(context);
     for (final event in events) {
       event.maybeWhen(
         emptyQuery: () {
-          const snackBar = SnackBar(
-            content: Text("Empty Query String!"),
+          final snackBar = SnackBar(
+            content: Text(l.searchMessageEmptyQuery),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
         waitSearch: () {
-          const snackBar = SnackBar(
-            content: Text("Wait While Searching!"),
+          final snackBar = SnackBar(
+            content: Text(l.searchMessageWait),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },

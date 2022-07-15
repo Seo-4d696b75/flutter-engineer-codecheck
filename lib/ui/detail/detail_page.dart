@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_engineer_codecheck/gen/assets.gen.dart';
 import 'package:flutter_engineer_codecheck/ui/detail/detail_view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/entities/repository_owner.dart';
@@ -10,9 +11,10 @@ class RepositoryDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = L10n.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Repository"),
+        title: Text(l.detailPageTitle),
       ),
       body: _RepositoryDetail(),
       backgroundColor: Colors.white,
@@ -27,6 +29,7 @@ class _RepositoryDetail extends ConsumerWidget {
     if (repository == null) {
       throw StateError("repository not selected");
     }
+    final l = L10n.of(context);
     return Container(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -48,36 +51,36 @@ class _RepositoryDetail extends ConsumerWidget {
               ],
             ),
             Container(height: 20),
-            const _FeatureTitle("About"),
+            _FeatureTitle(l.detailSectionAbout),
             _RepositoryFeature(
               Assets.img.star.svg(),
               repository.stargazersCount.toString(),
-              " star",
+              l.detailTextStar,
             ),
             _RepositoryFeature(
               Assets.img.watch.svg(),
               repository.watchersCount.toString(),
-              " watching",
+              l.detailTextWatching,
             ),
             _RepositoryFeature(
               Assets.img.fork.svg(),
               repository.forksCount.toString(),
-              " forks",
+              l.detailTextFork,
             ),
             _RepositoryFeature(
               Assets.img.issue.svg(),
               repository.openIssuesCount.toString(),
-              " open issues",
+              l.detailTextIssue,
             ),
-            const _FeatureTitle("language"),
+            _FeatureTitle(l.detailSectionLanguage),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(repository.language ?? "no information"),
+              child: Text(repository.language ?? l.detailTextNoLanguage),
             ),
-            const _FeatureTitle("description"),
+            _FeatureTitle(l.detailSectionDescription),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(repository.description ?? "no description"),
+              child: Text(repository.description ?? l.detailTextNoDescription),
             ),
           ],
         ));
