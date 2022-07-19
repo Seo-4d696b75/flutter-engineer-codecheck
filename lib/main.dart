@@ -11,6 +11,10 @@ void main() {
   );
 }
 
+final localeProvider = Provider<Locale?>(
+  (_) => null, // system's locale as default
+);
+
 class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -25,6 +29,7 @@ class MyApp extends ConsumerWidget {
       ),
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: L10n.supportedLocales,
+      locale: ref.read(localeProvider),
     );
   }
 }

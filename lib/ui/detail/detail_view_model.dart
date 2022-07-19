@@ -8,7 +8,7 @@ final repositoryDetailViewModelProvider =
 );
 
 class RepositoryDetailViewModel extends StateNotifier<GithubRepository?> {
-  RepositoryDetailViewModel() : super(null);
+  RepositoryDetailViewModel({GithubRepository? repo}) : super(repo);
 
   void selectRepository(GithubRepository repository) {
     state = repository;
