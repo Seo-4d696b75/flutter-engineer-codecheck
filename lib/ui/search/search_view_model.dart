@@ -47,7 +47,7 @@ class SearchViewModel extends StateNotifier<SearchViewState> {
 
   Future<void> _fetchPage(int page) async {
     final query = state.query;
-    await Future<void>.delayed(const Duration(milliseconds: 5000));
+    //await Future<void>.delayed(const Duration(milliseconds: 5000));
     if (query.isEmpty) {
       pagingController.appendLastPage([]);
       return;
