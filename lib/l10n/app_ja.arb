@@ -15,5 +15,11 @@
   "detailTextFork": "件のFork",
   "detailTextIssue": "個のオープンなIssue",
   "detailTextNoLanguage": "情報がありません",
-  "detailTextNoDescription": "説明はありません"
+  "detailTextNoDescription": "説明はありません",
+  "listFirstPageErrorTitle": "エラー",
+  "listFirstPageErrorMessage": "データの取得に失敗しました. 再度お試しください.",
+  "listRetryButton": "再試行",
+  "listFirstPageNoItemsTitle": "リポジトリが見つかりません",
+  "listFirstPageNoItemsMessage": "他の検索キーワードをお試しください.",
+  "listNewPageErrorTitle": "エラー！ タップして再試行"
 }

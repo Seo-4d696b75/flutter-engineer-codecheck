@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_engineer_codecheck/ui/search/list_widget.dart';
 import 'package:flutter_engineer_codecheck/ui/search/search_view_model.dart';
 import 'package:flutter_engineer_codecheck/ui/search/search_view_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -126,6 +127,14 @@ class _List extends ConsumerWidget {
                   .selectRepository(item);
               GoRouter.of(context).go("/repository");
             },
+          ),
+          firstPageErrorIndicatorBuilder: (_) => FirstPageError(
+            onRetry: () => viewModel.pagingController.refresh(),
+          ),
+          noItemsFoundIndicatorBuilder: (_) => const FirstPageNoItems(),
+          newPageProgressIndicatorBuilder: (_) => const NewPageProgress(),
+          newPageErrorIndicatorBuilder: (_) => NewPageError(
+            onRetry: () => viewModel.pagingController.retryLastFailedRequest(),
           ),
         ),
       ),

@@ -15,5 +15,11 @@
   "detailTextFork": " forks",
   "detailTextIssue": " open issue",
   "detailTextNoLanguage": "no information",
-  "detailTextNoDescription": "no description"
+  "detailTextNoDescription": "no description",
+  "listFirstPageErrorTitle": "Error",
+  "listFirstPageErrorMessage": "An error has happened while fetching data. Please retry later.",
+  "listRetryButton": "Retry",
+  "listFirstPageNoItemsTitle": "No repositories",
+  "listFirstPageNoItemsMessage": "Please retry other query.",
+  "listNewPageErrorTitle": "Error. Tap to retry"
 }
