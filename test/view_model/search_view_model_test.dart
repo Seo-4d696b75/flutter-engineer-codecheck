@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_engineer_codecheck/gen/assets.gen.dart';
 import 'package:flutter_engineer_codecheck/model/entities/repository_search_response.dart';
 import 'package:flutter_engineer_codecheck/model/repository/search_repository.dart';
 import 'package:flutter_engineer_codecheck/ui/search/search_view_model.dart';
@@ -18,7 +19,7 @@ void main() {
     final mockRepository = MockSearchRepository();
     const query = "test-query";
     final str =
-        File("test/json/search_repository_linux_10.json").readAsStringSync();
+        File(Assets.test.json.searchRepositoryLinux10).readAsStringSync();
     final mockResponse = RepositorySearchResponse.fromJson(jsonDecode(str));
 
     Future<void> waitUntil(

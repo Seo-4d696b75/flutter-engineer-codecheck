@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_engineer_codecheck/gen/assets.gen.dart';
 import 'package:flutter_engineer_codecheck/model/api/github_api.dart';
 import 'package:flutter_engineer_codecheck/model/entities/repository.dart';
 import 'package:flutter_engineer_codecheck/model/entities/repository_search_response.dart';
@@ -48,7 +49,7 @@ void main() {
     test("repository x 10", () async {
       // prepare
       final str =
-          File("test/json/search_repository_linux_10.json").readAsStringSync();
+          File(Assets.test.json.searchRepositoryLinux10).readAsStringSync();
       final mockResponse = RepositorySearchResponse.fromJson(jsonDecode(str));
       adapter.onGet(
         "/search/repositories",
