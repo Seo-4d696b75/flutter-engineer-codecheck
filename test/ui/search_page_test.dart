@@ -25,10 +25,10 @@ void main() {
     testWidgets("SnackBar - 空の検索キーワード", (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -57,11 +57,11 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
             searchRepositoryProvider.overrideWithValue(mockRepository),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -100,11 +100,11 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
             searchRepositoryProvider.overrideWithValue(mockRepository),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -166,11 +166,11 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
             searchRepositoryProvider.overrideWithValue(mockRepository),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -215,11 +215,11 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
             searchRepositoryProvider.overrideWithValue(mockRepository),
           ],
+          child: const MyApp(),
         ),
       );
 

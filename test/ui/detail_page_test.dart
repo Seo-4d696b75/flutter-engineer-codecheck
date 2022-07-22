@@ -30,7 +30,6 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             routerProvider.overrideWithValue(testRouter),
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
@@ -38,6 +37,7 @@ void main() {
               RepositoryDetailViewModel(repo: repository),
             ),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -67,7 +67,6 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             routerProvider.overrideWithValue(testRouter),
             localeProvider.overrideWithValue(const Locale("en", "US")),
@@ -75,6 +74,7 @@ void main() {
               RepositoryDetailViewModel(repo: repository),
             ),
           ],
+          child: const MyApp(),
         ),
       );
 
