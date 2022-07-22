@@ -64,7 +64,8 @@ class _FindsWidgetMatcher extends Matcher {
       return description.add('at least $min matching nodes in the widget tree');
     }
     return description.add(
-        'between $min and $max matching nodes in the widget tree (inclusive)');
+      'between $min and $max matching nodes in the widget tree (inclusive)',
+    );
   }
 
   @override

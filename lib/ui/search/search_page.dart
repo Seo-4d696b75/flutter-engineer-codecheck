@@ -41,16 +41,19 @@ class _SearchBox extends HookConsumerWidget {
     final viewModel = ref.watch(searchViewModelProvider.notifier);
     final events =
         ref.watch(searchViewModelProvider.select((state) => state.events));
-    useEffect(() {
-      if (events.isNotEmpty) {
-        Future.microtask(() {
-          // buildより後に実行する必要がある
-          _handleEvents(context, events);
-          viewModel.consumeEvents();
-        });
-      }
-      return null;
-    }, [events]);
+    useEffect(
+      () {
+        if (events.isNotEmpty) {
+          Future.microtask(() {
+            // buildより後に実行する必要がある
+            _handleEvents(context, events);
+            viewModel.consumeEvents();
+          });
+        }
+        return null;
+      },
+      [events],
+    );
     final l = L10n.of(context);
     return Container(
       height: 80,

@@ -64,11 +64,13 @@ void main() {
     test("初回読み込み", () async {
       // prepare
       final viewModel = getViewModel();
-      when(mockRepository.search(
-        query: query,
-        page: 1,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async => mockResponse);
+      when(
+        mockRepository.search(
+          query: query,
+          page: 1,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async => mockResponse);
 
       // test
       viewModel.textController.text = query;
@@ -101,11 +103,13 @@ void main() {
     test("追加読み込み", () async {
       // prepare
       final viewModel = getViewModel();
-      when(mockRepository.search(
-        query: query,
-        page: 1,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async => mockResponse);
+      when(
+        mockRepository.search(
+          query: query,
+          page: 1,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async => mockResponse);
 
       // first loading
       viewModel.textController.text = query;
@@ -114,11 +118,13 @@ void main() {
       await waitUntil(viewModel, PagingStatus.ongoing);
 
       // prepare
-      when(mockRepository.search(
-        query: query,
-        page: 2,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer(
+      when(
+        mockRepository.search(
+          query: query,
+          page: 2,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer(
         (_) async => mockResponse.copyWith(
           // nextPageなし
           totalCount: mockResponse.items.length * 2,
@@ -148,11 +154,13 @@ void main() {
     test("初回読み込み失敗", () async {
       // prepare
       final viewModel = getViewModel();
-      when(mockRepository.search(
-        query: query,
-        page: 1,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: query,
+          page: 1,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         throw const HttpException("test");
       });
 
@@ -176,22 +184,26 @@ void main() {
     test("追加読み込み失敗", () async {
       // prepare (first-loading)
       final viewModel = getViewModel();
-      when(mockRepository.search(
-        query: query,
-        page: 1,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async => mockResponse);
+      when(
+        mockRepository.search(
+          query: query,
+          page: 1,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async => mockResponse);
       viewModel.textController.text = query;
       viewModel.search();
       viewModel.pagingController.notifyPageRequestListeners(1);
       await waitUntil(viewModel, PagingStatus.ongoing);
 
       // prepare (additional-loading)
-      when(mockRepository.search(
-        query: query,
-        page: 2,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: query,
+          page: 2,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         throw const HttpException("test");
       });
 

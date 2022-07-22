@@ -15,10 +15,12 @@ final searchViewModelProvider =
 
 class SearchViewModel extends StateNotifier<SearchViewState> {
   SearchViewModel(this._repository)
-      : super(SearchViewState(
-          query: "",
-          events: [],
-        )) {
+      : super(
+          SearchViewState(
+            query: "",
+            events: [],
+          ),
+        ) {
     pagingController.addPageRequestListener((page) => _fetchPage(page));
   }
 
