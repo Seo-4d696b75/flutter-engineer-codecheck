@@ -31,59 +31,60 @@ class _RepositoryDetail extends ConsumerWidget {
     }
     final l = L10n.of(context);
     return Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                _OwnerIcon(repository.owner),
-                Container(width: 10),
-                Expanded(
-                  child: Text(
-                    repository.fullName,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 20),
-                  ),
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              _OwnerIcon(repository.owner),
+              Container(width: 10),
+              Expanded(
+                child: Text(
+                  repository.fullName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 20),
                 ),
-              ],
-            ),
-            Container(height: 20),
-            _FeatureTitle(l.detailSectionAbout),
-            _RepositoryFeature(
-              Assets.img.star.svg(),
-              repository.stargazersCount.toString(),
-              l.detailTextStar,
-            ),
-            _RepositoryFeature(
-              Assets.img.watch.svg(),
-              repository.watchersCount.toString(),
-              l.detailTextWatching,
-            ),
-            _RepositoryFeature(
-              Assets.img.fork.svg(),
-              repository.forksCount.toString(),
-              l.detailTextFork,
-            ),
-            _RepositoryFeature(
-              Assets.img.issue.svg(),
-              repository.openIssuesCount.toString(),
-              l.detailTextIssue,
-            ),
-            _FeatureTitle(l.detailSectionLanguage),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(repository.language ?? l.detailTextNoLanguage),
-            ),
-            _FeatureTitle(l.detailSectionDescription),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(repository.description ?? l.detailTextNoDescription),
-            ),
-          ],
-        ));
+              ),
+            ],
+          ),
+          Container(height: 20),
+          _FeatureTitle(l.detailSectionAbout),
+          _RepositoryFeature(
+            Assets.img.star.svg(),
+            repository.stargazersCount.toString(),
+            l.detailTextStar,
+          ),
+          _RepositoryFeature(
+            Assets.img.watch.svg(),
+            repository.watchersCount.toString(),
+            l.detailTextWatching,
+          ),
+          _RepositoryFeature(
+            Assets.img.fork.svg(),
+            repository.forksCount.toString(),
+            l.detailTextFork,
+          ),
+          _RepositoryFeature(
+            Assets.img.issue.svg(),
+            repository.openIssuesCount.toString(),
+            l.detailTextIssue,
+          ),
+          _FeatureTitle(l.detailSectionLanguage),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(repository.language ?? l.detailTextNoLanguage),
+          ),
+          _FeatureTitle(l.detailSectionDescription),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(repository.description ?? l.detailTextNoDescription),
+          ),
+        ],
+      ),
+    );
   }
 }
 

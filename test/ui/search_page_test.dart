@@ -25,10 +25,10 @@ void main() {
     testWidgets("SnackBar - 空の検索キーワード", (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -46,22 +46,24 @@ void main() {
     testWidgets("SnackBar - まだ検索中だから待て", (tester) async {
       final mockRepository = MockSearchRepository();
       final completer = Completer();
-      when(mockRepository.search(
-        query: anyNamed("query"),
-        page: anyNamed("page"),
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: anyNamed("query"),
+          page: anyNamed("page"),
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         await completer.future; // 検索状態のまま待機させる
         throw StateError("no response for test");
       });
 
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
             searchRepositoryProvider.overrideWithValue(mockRepository),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -89,22 +91,24 @@ void main() {
     testWidgets("初回読み込み失敗 > Retry", (tester) async {
       final mockRepository = MockSearchRepository();
       final completer = Completer();
-      when(mockRepository.search(
-        query: anyNamed("query"),
-        page: anyNamed("page"),
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: anyNamed("query"),
+          page: anyNamed("page"),
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         await completer.future; // 検索状態のまま待機させる
         throw Exception("test");
       });
 
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
             searchRepositoryProvider.overrideWithValue(mockRepository),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -130,11 +134,13 @@ void main() {
       expect(find.text("データの取得に失敗しました. 再度お試しください."), findsOneWidget);
 
       // 再試行
-      when(mockRepository.search(
-        query: anyNamed("query"),
-        page: anyNamed("page"),
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: anyNamed("query"),
+          page: anyNamed("page"),
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         return mockResponse;
       });
 
@@ -151,11 +157,13 @@ void main() {
     testWidgets("検索結果0件", (tester) async {
       final mockRepository = MockSearchRepository();
       final completer = Completer();
-      when(mockRepository.search(
-        query: anyNamed("query"),
-        page: anyNamed("page"),
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: anyNamed("query"),
+          page: anyNamed("page"),
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         await completer.future; // 検索状態のまま待機させる
         return RepositorySearchResponse(
           totalCount: 0,
@@ -166,11 +174,11 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
             searchRepositoryProvider.overrideWithValue(mockRepository),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -195,31 +203,35 @@ void main() {
     });
     testWidgets("追加読み込み失敗 > Retry", (tester) async {
       final mockRepository = MockSearchRepository();
-      when(mockRepository.search(
-        query: anyNamed("query"),
-        page: 1,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: anyNamed("query"),
+          page: 1,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         return mockResponse;
       });
 
       final completer = Completer();
-      when(mockRepository.search(
-        query: anyNamed("query"),
-        page: 2,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: anyNamed("query"),
+          page: 2,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         await completer.future;
         throw Exception("test");
       });
 
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
             searchRepositoryProvider.overrideWithValue(mockRepository),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -252,11 +264,13 @@ void main() {
       expect(find.text("エラー！ タップして再試行"), findsOneWidget);
 
       // 再試行
-      when(mockRepository.search(
-        query: anyNamed("query"),
-        page: 2,
-        perPage: anyNamed("perPage"),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.search(
+          query: anyNamed("query"),
+          page: 2,
+          perPage: anyNamed("perPage"),
+        ),
+      ).thenAnswer((_) async {
         return mockResponse;
       });
       await tester.tap(find.text("エラー！ タップして再試行"));

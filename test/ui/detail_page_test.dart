@@ -10,12 +10,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
   group("詳細ページ WidgetTest", () {
-    final testRouter = GoRouter(routes: [
-      GoRoute(
-        path: "/",
-        builder: (context, state) => const RepositoryDetailPage(),
-      ),
-    ]);
+    final testRouter = GoRouter(
+      routes: [
+        GoRoute(
+          path: "/",
+          builder: (context, state) => const RepositoryDetailPage(),
+        ),
+      ],
+    );
     testWidgets("ja", (tester) async {
       final repository = GithubRepository(
         id: 0,
@@ -30,7 +32,6 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             routerProvider.overrideWithValue(testRouter),
             localeProvider.overrideWithValue(const Locale("ja", "JP")),
@@ -38,6 +39,7 @@ void main() {
               RepositoryDetailViewModel(repo: repository),
             ),
           ],
+          child: const MyApp(),
         ),
       );
 
@@ -67,7 +69,6 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          child: const MyApp(),
           overrides: [
             routerProvider.overrideWithValue(testRouter),
             localeProvider.overrideWithValue(const Locale("en", "US")),
@@ -75,6 +76,7 @@ void main() {
               RepositoryDetailViewModel(repo: repository),
             ),
           ],
+          child: const MyApp(),
         ),
       );
 
