@@ -21,6 +21,9 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
       - name: setup dependencies
-        run: make
+        run: |
+          flutter pub get
+          flutter pub run build_runner build
+          flutter gen-l10n
       - name: run test
-        run: fvm flutter test
+        run: flutter test
